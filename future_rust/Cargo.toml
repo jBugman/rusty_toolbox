@@ -1,0 +1,9 @@
+[package]
+name = "future_rust"
+version = "0.1.0"
+authors = ["Sergey Parshukov <codedby@bugman.me>"]
+description = "Future-compatibility with std Rust"
+license = "MIT"
+publish = false
+
+[dependencies]
