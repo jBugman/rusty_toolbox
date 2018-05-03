@@ -1,6 +1,6 @@
 [package]
 name = "failure_ext"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Sergey Parshukov <codedby@bugman.me>"]
 description = "Sugar for the failure crate"
 license = "MIT"

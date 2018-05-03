@@ -5,7 +5,7 @@ use std::fmt::Display;
 use std::path::Path;
 use std::result::Result as StdResult;
 
-use failure::{Error, Fail};
+pub use failure::{Error, Fail, ResultExt};
 
 pub type Result<T> = StdResult<T, Error>;
 
