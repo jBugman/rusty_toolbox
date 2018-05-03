@@ -19,3 +19,23 @@ pub mod fs {
 pub mod convert {
     pub use try_from::{TryFrom, TryInto};
 }
+
+// TODO: Deprecated in Rust 1.26
+pub mod option {
+    pub trait FilterExt<T> {
+        fn filter_<P: FnOnce(&T) -> bool>(self, predicate: P) -> Self;
+    }
+
+    impl<T> FilterExt<T> for Option<T> {
+        // Copy-pasted from std
+        #[inline]
+        fn filter_<P: FnOnce(&T) -> bool>(self, predicate: P) -> Self {
+            if let Some(x) = self {
+                if predicate(&x) {
+                    return Some(x);
+                }
+            }
+            None
+        }
+    }
+}
