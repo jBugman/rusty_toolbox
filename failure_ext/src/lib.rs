@@ -79,3 +79,18 @@ extern crate yansi;
 fn fmt_error(err: &Fail) {
     eprintln!("{} {}", yansi::Paint::red("error:"), err);
 }
+
+pub trait ContextAsErrorExt<T> {
+    fn context_err<D>(self, context: D) -> Result<T>
+    where
+        D: Display + Send + Sync + 'static;
+}
+
+impl<T, E: Fail> ContextAsErrorExt<T> for StdResult<T, E> {
+    fn context_err<D>(self, c: D) -> Result<T>
+    where
+        D: Display + Send + Sync + 'static,
+    {
+        self.context(c).map_err(Error::from)
+    }
+}
