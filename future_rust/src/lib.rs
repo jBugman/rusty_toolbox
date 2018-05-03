@@ -1,3 +1,6 @@
+extern crate try_from;
+
+// TODO: Deprecated in Rust 1.26
 pub mod fs {
     use std::fs::File;
     use std::path::Path;
@@ -10,4 +13,9 @@ pub mod fs {
         file.read_to_string(&mut string)?;
         Ok(string)
     }
+}
+
+// TODO: Deprecated in Rust 1.27+ (https://github.com/rust-lang/rust/issues/33417)
+pub mod convert {
+    pub use try_from::{TryFrom, TryInto};
 }
