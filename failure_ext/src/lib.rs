@@ -46,3 +46,36 @@ impl<T> OptionFailExt<T> for Option<T> {
         self.ok_or_else(|| format_err!("{}", msg))
     }
 }
+
+pub trait UnwrapOrExit<T> {
+    fn unwrap_or_exit(self) -> T;
+}
+
+impl<T> UnwrapOrExit<T> for Result<T> {
+    fn unwrap_or_exit(self) -> T {
+        match self {
+            Err(err) => {
+                let mut causes = err.causes();
+                fmt_error(causes.next().unwrap());
+                for c in causes {
+                    eprintln!(" caused by: {}", c);
+                }
+                std::process::exit(1);
+            }
+            Ok(v) => v,
+        }
+    }
+}
+
+#[cfg(not(feature = "color"))]
+fn fmt_error(err: &Fail) {
+    eprintln!("error: {}", err);
+}
+
+#[cfg(feature = "color")]
+extern crate yansi;
+
+#[cfg(feature = "color")]
+fn fmt_error(err: &Fail) {
+    eprintln!("{} {}", yansi::Paint::red("error:"), err);
+}
