@@ -1,10 +1,9 @@
 [package]
 name = "future_rust"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Sergey Parshukov <codedby@bugman.me>"]
 description = "Future-compatibility with std Rust"
 license = "MIT"
 publish = false
 
 [dependencies]
-try_from = "0.2.2"
