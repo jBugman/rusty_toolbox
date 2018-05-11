@@ -28,12 +28,12 @@ impl<T, D: Display, E: Fail> FmtResultExt<T, D> for StdResult<T, E> {
 }
 
 pub trait PathResultExt<T> {
-    fn context_path(self, msg: &str, path: &Path) -> Result<T>;
+    fn context_path(self, msg: &str, path: impl AsRef<Path>) -> Result<T>;
 }
 
 impl<T, E: Fail> PathResultExt<T> for StdResult<T, E> {
-    fn context_path(self, msg: &str, path: &Path) -> Result<T> {
-        self.map_err(|err| wrap_error(err, msg, path.display()))
+    fn context_path(self, msg: &str, path: impl AsRef<Path>) -> Result<T> {
+        self.map_err(|err| wrap_error(err, msg, path.as_ref().display()))
     }
 }
 
