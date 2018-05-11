@@ -13,7 +13,7 @@ pub mod fs {
     }
 }
 
-// TODO: Deprecated in Rust 1.27+ (https://github.com/rust-lang/rust/issues/33417)
+// TODO: Deprecate on stabilization (https://github.com/rust-lang/rust/issues/33417)
 pub mod convert {
     pub trait TryFrom<T>: Sized {
         type Error;
@@ -26,7 +26,7 @@ pub mod convert {
     }
 }
 
-// TODO: Deprecated in Rust 1.26 (https://github.com/rust-lang/rust/issues/45860)
+// TODO: Deprecate on stabilization (https://github.com/rust-lang/rust/issues/45860)
 pub mod option {
     pub trait FilterExt<T> {
         fn filter_<P: FnOnce(&T) -> bool>(self, predicate: P) -> Self;

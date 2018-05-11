@@ -60,17 +60,29 @@ impl<T> UnwrapOrExit<T> for Result<T> {
     }
 }
 
-pub fn log_errors(r: Result<()>) -> ! {
-    ::std::process::exit(match r {
-        Err(err) => {
-            print_causes(err);
-            1
-        }
-        Ok(_) => 0,
-    });
+// TODO: log_errors-in-main macro
+pub fn log_errors(r: impl Termination) -> ! {
+    ::std::process::exit(r.report());
 }
 
-fn print_causes(err: Error) {
+// TODO: Deprecate on stabilization (https://github.com/rust-lang/rust/issues/43301)
+pub trait Termination {
+    fn report(self) -> i32;
+}
+
+impl Termination for Result<()> {
+    fn report(self) -> i32 {
+        match self {
+            Err(err) => {
+                print_causes(&err);
+                1
+            }
+            Ok(_) => 0,
+        }
+    }
+}
+
+fn print_causes(err: &Error) {
     let mut causes = err.causes();
     fmt_error(causes.next().unwrap());
     for c in causes {
