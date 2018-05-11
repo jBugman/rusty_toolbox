@@ -47,23 +47,34 @@ impl<T> OptionFailExt<T> for Option<T> {
     }
 }
 
+#[deprecated(since = "0.5.0", note = "use log_errors function")]
 pub trait UnwrapOrExit<T> {
     fn unwrap_or_exit(self) -> T;
 }
 
+#[allow(deprecated)]
+#[deprecated(since = "0.5.0", note = "use log_errors function")]
 impl<T> UnwrapOrExit<T> for Result<T> {
     fn unwrap_or_exit(self) -> T {
-        match self {
-            Err(err) => {
-                let mut causes = err.causes();
-                fmt_error(causes.next().unwrap());
-                for c in causes {
-                    eprintln!(" caused by: {}", c);
-                }
-                std::process::exit(1);
-            }
-            Ok(v) => v,
+        self.unwrap_or_else(|err| log_errors(Err(err)))
+    }
+}
+
+pub fn log_errors(r: Result<()>) -> ! {
+    ::std::process::exit(match r {
+        Err(err) => {
+            print_causes(err);
+            1
         }
+        Ok(_) => 0,
+    });
+}
+
+fn print_causes(err: Error) {
+    let mut causes = err.causes();
+    fmt_error(causes.next().unwrap());
+    for c in causes {
+        eprintln!(" caused by: {}", c);
     }
 }
 
